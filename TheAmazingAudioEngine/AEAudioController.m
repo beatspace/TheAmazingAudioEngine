@@ -275,6 +275,20 @@ typedef struct _channel_group_t {
 @end
 
 @implementation AEAudioController
+#pragma mark -  Offline Rendering
+BOOL AEAudioControllerRenderMainOutput( __unsafe_unretained AEAudioController *audioController, AudioTimeStamp inTimeStamp, UInt32 inNumberFrames, AudioBufferList *ioData) {
+    channel_producer_arg_t arg = {
+        .channel = audioController->_topChannel,
+        .timeStamp = inTimeStamp,
+        .originalTimeStamp = inTimeStamp,
+        .ioActionFlags = 0,
+        .nextFilterIndex = 0
+    };
+    OSStatus result = channelAudioProducer((void *) &arg, ioData, &inNumberFrames);
+    handleCallbacksForChannel(arg.channel, &inTimeStamp, inNumberFrames, ioData);
+    return result;
+}
+
 #if TARGET_OS_IPHONE
 @synthesize audioSessionCategory = _audioSessionCategory, audioUnit = _ioAudioUnit;
 #endif

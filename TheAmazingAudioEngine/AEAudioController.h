@@ -528,6 +528,9 @@ typedef enum {
  */
 @interface AEAudioController : NSObject
 
+#pragma mark - Offline Rendering
+BOOL AEAudioControllerRenderMainOutput( __unsafe_unretained AEAudioController *audioController, AudioTimeStamp inTimeStamp, UInt32 inNumberFrames, AudioBufferList *ioData);
+
 #pragma mark - Setup and start/stop
 /** @name Setup and start/stop */
 ///@{
